@@ -81,7 +81,7 @@ export function ContactSection() {
           </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 scroll-trigger">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 scroll-trigger">
           <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
             <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.email}</div>
             <a
@@ -103,6 +103,14 @@ export function ContactSection() {
           <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
             <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.location}</div>
             <p className="text-sm sm:text-base text-foreground font-light">Madagascar</p>
+          </div>
+          <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
+            <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.nif}</div>
+            <p className="text-sm sm:text-base text-foreground font-light">7019388860</p>
+          </div>
+          <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-accent/50 transition-all duration-500 card-hover">
+            <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.stat}</div>
+            <p className="text-sm sm:text-base text-foreground font-light">74908 21 2025 0 01129</p>
           </div>
         </div>
       </div>

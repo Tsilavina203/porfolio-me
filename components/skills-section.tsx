@@ -1,17 +1,49 @@
 "use client"
 
-import { useRef, useEffect } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useRef, useEffect, useState } from "react"
 import { useLanguage } from "@/contexts/language-context"
+import { Sparkles, Code, Brain, Cloud, Database, Zap, BarChart3, Globe } from "lucide-react"
 
 export function SkillsSection() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const { t } = useLanguage()
+  const sectionRef = useRef<HTMLElement>(null)
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const revealElements = entry.target.querySelectorAll('.scroll-trigger')
+            revealElements.forEach((el, index) => {
+              setTimeout(() => {
+                el.classList.add('visible')
+              }, index * 150)
+            })
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current)
+      }
+    }
+  }, [])
 
   const skillCategories = [
     {
+      id: "data-engineering",
       category: "Data Engineering",
+      icon: Database,
+      color: "primary",
+      description: "Pipelines ETL/ELT, nettoyage de données, entrepôt de données et intégration",
       skills: [
         "ETL/ELT",
         "Data Pipelines",
@@ -28,7 +60,11 @@ export function SkillsSection() {
       ],
     },
     {
+      id: "ai-ml",
       category: "AI & Machine Learning",
+      icon: Brain,
+      color: "accent",
+      description: "Systèmes RAG, LLMs multimodaux, agents et applications d'IA générative",
       skills: [
         "LLMs",
         "GenAI",
@@ -45,11 +81,19 @@ export function SkillsSection() {
       ],
     },
     {
+      id: "programming",
       category: "Programming Languages",
+      icon: Code,
+      color: "primary",
+      description: "Maîtrise de plusieurs langages pour le développement backend et data",
       skills: ["Python", "JavaScript", "TypeScript", "Java", "Go", "SQL", "R", "Kotlin"],
     },
     {
+      id: "backend-devops",
       category: "Backend & DevOps",
+      icon: Zap,
+      color: "accent",
+      description: "APIs sécurisées, Docker, CI/CD et infrastructure scalable",
       skills: [
         "FastAPI",
         "Docker",
@@ -68,7 +112,11 @@ export function SkillsSection() {
       ],
     },
     {
+      id: "ai-frameworks",
       category: "AI Frameworks & Tools",
+      icon: Sparkles,
+      color: "primary",
+      description: "Frameworks et outils pour le développement d'applications IA",
       skills: [
         "LangChain",
         "LangGraph",
@@ -86,7 +134,11 @@ export function SkillsSection() {
       ],
     },
     {
+      id: "bi-analytics",
       category: "BI & Analytics",
+      icon: BarChart3,
+      color: "accent",
+      description: "Tableaux de bord, KPIs, visualisation et analyse de données",
       skills: [
         "Power BI",
         "Reporting",
@@ -102,51 +154,50 @@ export function SkillsSection() {
       ],
     },
     {
+      id: "cloud",
       category: "Cloud & Infrastructure",
+      icon: Cloud,
+      color: "primary",
+      description: "Infrastructure cloud, serverless et microservices",
       skills: ["AWS EC2", "AWS Lambda", "AWS S3", "Google Cloud", "Azure", "Serverless", "API Design", "Microservices"],
     },
     {
+      id: "web-frontend",
       category: "Web & Frontend",
+      icon: Globe,
+      color: "accent",
+      description: "Développement frontend moderne et APIs REST/GraphQL",
       skills: ["React", "Next.js", "Tailwind CSS", "REST APIs", "GraphQL", "HTML/CSS", "Node.js"],
     },
   ]
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 400
-      scrollContainerRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      })
+  const getColorClasses = (color: string) => {
+    if (color === "primary") {
+      return {
+        border: "border-primary/30 hover:border-primary/60",
+        bg: "bg-primary/10",
+        text: "text-primary",
+        icon: "text-primary",
+        skillBg: "bg-primary/20 hover:bg-primary/30",
+        skillBorder: "border-primary/30 hover:border-primary/50",
+      }
+    }
+    return {
+      border: "border-accent/30 hover:border-accent/60",
+      bg: "bg-accent/10",
+      text: "text-accent",
+      icon: "text-accent",
+      skillBg: "bg-accent/20 hover:bg-accent/30",
+      skillBorder: "border-accent/30 hover:border-accent/50",
     }
   }
 
-  useEffect(() => {
-    // Auto-scroll every 2 seconds
-    autoScrollIntervalRef.current = setInterval(() => {
-      if (scrollContainerRef.current) {
-        const container = scrollContainerRef.current
-        const scrollAmount = 400
-        const maxScroll = container.scrollWidth - container.clientWidth
-        
-        if (container.scrollLeft >= maxScroll - 10) {
-          // Reset to beginning when reaching the end
-          container.scrollTo({ left: 0, behavior: "smooth" })
-        } else {
-          container.scrollBy({ left: scrollAmount, behavior: "smooth" })
-        }
-      }
-    }, 2000)
-
-    return () => {
-      if (autoScrollIntervalRef.current) {
-        clearInterval(autoScrollIntervalRef.current)
-      }
-    }
-  }, [])
-
   return (
-    <section id="skills" className="min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative flex items-center">
+    <section 
+      ref={sectionRef}
+      id="skills" 
+      className="min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative"
+    >
       {/* Background overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background z-0"></div>
       
@@ -166,54 +217,155 @@ export function SkillsSection() {
           4
         </div>
 
+        {/* Section title with slogan */}
         <div className="scroll-trigger relative z-10">
           <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.9] tracking-tight">
-            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>Expertise</span>
-            <span className="block text-muted-foreground/60 text-2xl sm:text-3xl md:text-4xl mt-2 sm:mt-4 font-light stagger-reveal" style={{ animationDelay: '0.3s' }}>Technique</span>
+            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>{t.skills.title}</span>
+            <span className="block text-muted-foreground/60 text-2xl sm:text-3xl md:text-4xl mt-2 sm:mt-4 font-light stagger-reveal" style={{ animationDelay: '0.3s' }}>
+              {t.skills.subtitle}
+            </span>
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground/70 max-w-2xl mt-6 sm:mt-8 leading-relaxed font-light scroll-trigger">
             {t.skills.description}
           </p>
         </div>
 
-        <div className="relative">
-          <button
-            onClick={() => scroll("left")}
-            className="absolute left-2 sm:left-4 md:left-0 top-1/2 -translate-y-1/2 z-10 glass border border-border/50 rounded-full p-1.5 sm:p-2 hover:border-primary/50 transition-all duration-300 shadow-lg hover-lift hover-glow hidden sm:flex"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="absolute right-2 sm:right-4 md:right-0 top-1/2 -translate-y-1/2 z-10 glass border border-border/50 rounded-full p-1.5 sm:p-2 hover:border-primary/50 transition-all duration-300 shadow-lg hover-lift hover-glow hidden sm:flex"
-            aria-label="Scroll right"
-          >
-            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-          </button>
-          <div
-            ref={scrollContainerRef}
-            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide pb-4 scroll-smooth"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {skillCategories.map((category) => (
+        {/* Skills grid - Compact 2x4 design */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4 scroll-trigger">
+          {skillCategories.map((category, index) => {
+            const Icon = category.icon
+            const colors = getColorClasses(category.color)
+            const isHovered = hoveredCategory === category.id
+
+            return (
               <div
-                key={category.category}
-                className="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px] p-4 sm:p-5 md:p-6 glass rounded-lg border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover"
+                key={category.id}
+                onMouseEnter={() => setHoveredCategory(category.id)}
+                onMouseLeave={() => setHoveredCategory(null)}
+                className={`
+                  group relative p-3 sm:p-4 md:p-4 glass border ${colors.border} 
+                  transition-all duration-500 overflow-hidden
+                  ${isHovered ? 'scale-[1.05] shadow-xl border-opacity-100' : ''}
+                  hover:border-opacity-80
+                `}
+                style={{ 
+                  animationDelay: `${index * 0.05}s`,
+                  clipPath: isHovered ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' : 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                }}
               >
-                <h3 className="font-semibold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 text-primary">{category.category}</h3>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {category.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-primary/20 text-primary text-[10px] xs:text-xs sm:text-sm rounded-full font-medium border border-primary/30 hover:bg-primary/30 hover:border-primary/50 transition-all duration-300 hover:scale-105 cursor-default"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                {/* Animated gradient overlay */}
+                <div className={`
+                  absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
+                  bg-gradient-to-br ${colors.bg} from-transparent via-transparent to-transparent
+                `}></div>
+
+                {/* Diagonal accent line */}
+                <div className={`
+                  absolute top-0 left-0 w-full h-0.5 ${colors.bg}
+                  transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500
+                `}></div>
+
+                {/* Content - Compact */}
+                <div className="relative z-10 space-y-2 sm:space-y-2.5">
+                  {/* Header - Minimalist */}
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <div className={`
+                      p-1 sm:p-1.5 rounded ${colors.bg} border ${colors.border}
+                      transition-all duration-300 group-hover:rotate-12 group-hover:scale-110
+                    `}>
+                      <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${colors.icon}`} />
+                    </div>
+                    <h3 className={`text-xs sm:text-sm md:text-base font-light ${colors.text} leading-tight truncate`}>
+                      {category.category.split(' ')[0]}
+                      {category.category.includes('&') && (
+                        <span className="block text-[10px] sm:text-xs opacity-70">{category.category.split('&')[1]?.trim()}</span>
+                      )}
+                    </h3>
+                  </div>
+
+                  {/* Skills - Compact tags in grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 pt-1">
+                    {category.skills.slice(0, 6).map((skill, skillIndex) => (
+                      <span
+                        key={skill}
+                        className={`
+                          px-1 sm:px-1.5 py-0.5 ${colors.skillBg} ${colors.text}
+                          text-[8px] xs:text-[9px] sm:text-[10px] rounded font-medium border ${colors.skillBorder}
+                          transition-all duration-300 cursor-default truncate
+                          group-hover:scale-105 hover:scale-110
+                        `}
+                        title={skill}
+                      >
+                        {skill.length > 7 ? skill.substring(0, 6) + '...' : skill}
+                      </span>
+                    ))}
+                    {category.skills.length > 6 && (
+                      <span className={`
+                        px-1 sm:px-1.5 py-0.5 ${colors.skillBg} ${colors.text}
+                        text-[8px] xs:text-[9px] sm:text-[10px] rounded font-medium border ${colors.skillBorder}
+                        text-center
+                      `}>
+                        +{category.skills.length - 6}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bottom accent */}
+                <div className={`
+                  absolute bottom-0 right-0 w-12 h-12 ${colors.bg} rounded-tl-full
+                  opacity-0 group-hover:opacity-10 transition-opacity duration-500
+                  blur-2xl
+                `}></div>
+
+                {/* Corner number indicator */}
+                <div className={`
+                  absolute top-1.5 right-1.5 w-4 h-4 rounded-full ${colors.bg} border ${colors.border}
+                  opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                  flex items-center justify-center
+                `}>
+                  <span className={`text-[7px] ${colors.text} font-bold`}>
+                    {category.skills.length}
+                  </span>
                 </div>
               </div>
-            ))}
+            )
+          })}
+        </div>
+
+        {/* Stats footer */}
+        <div className="scroll-trigger grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 pt-8 border-t border-border/20">
+          <div className="text-center space-y-2">
+            <div className="text-3xl sm:text-4xl md:text-5xl font-light large-number text-foreground count-up">
+              150+
+            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground/60 font-light tracking-wider uppercase">
+              Compétences
+            </p>
+          </div>
+          <div className="text-center space-y-2">
+            <div className="text-3xl sm:text-4xl md:text-5xl font-light large-number text-primary count-up" style={{ animationDelay: '0.1s' }}>
+              3
+            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground/60 font-light tracking-wider uppercase">
+              Années d'Expérience
+            </p>
+          </div>
+          <div className="text-center space-y-2">
+            <div className="text-3xl sm:text-4xl md:text-5xl font-light large-number text-accent count-up" style={{ animationDelay: '0.2s' }}>
+              10+
+            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground/60 font-light tracking-wider uppercase">
+              Projets Livrés
+            </p>
+          </div>
+          <div className="text-center space-y-2">
+            <div className="text-3xl sm:text-4xl md:text-5xl font-light large-number text-foreground count-up" style={{ animationDelay: '0.3s' }}>
+              30+
+            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground/60 font-light tracking-wider uppercase">
+              Technologies
+            </p>
           </div>
         </div>
       </div>

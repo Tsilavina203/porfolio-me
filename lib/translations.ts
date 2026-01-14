@@ -24,7 +24,8 @@ export const translations = {
       technologies: "Technologies",
     },
     skills: {
-      title: "Technical Expertise",
+      title: "Mastery",
+      subtitle: "the art of precision",
       description: "Comprehensive skill set spanning 30+ technologies in data engineering, AI, backend development, cloud infrastructure, and modern web technologies",
     },
     projects: {
@@ -52,6 +53,8 @@ export const translations = {
       email: "Email",
       phone: "Phone",
       location: "Location",
+      nif: "NIF",
+      stat: "STAT",
     },
   },
   fr: {
@@ -85,7 +88,8 @@ export const translations = {
       narrative3: "Les premiers scripts du destin.",
     },
     skills: {
-      title: "Expertise Technique",
+      title: "Maîtrise",
+      subtitle: "l'art de la précision",
       description: "Ensemble de compétences couvrant 30+ technologies en ingénierie de données, IA, développement backend, infrastructure cloud et technologies web modernes",
     },
     projects: {
@@ -129,6 +133,8 @@ export const translations = {
       email: "Email",
       phone: "Téléphone",
       location: "Localisation",
+      nif: "NIF",
+      stat: "STAT",
     },
   },
 } as const

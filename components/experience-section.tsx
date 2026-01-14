@@ -55,8 +55,8 @@ export function ExperienceSection() {
       ],
       stats: {
         projects: "3+",
-        technologies: "15+",
         impact: "75%",
+        efficiency: "80%",
       },
     },
     {
@@ -75,8 +75,8 @@ export function ExperienceSection() {
       ],
       stats: {
         projects: "4+",
-        technologies: "20+",
         impact: "80%",
+        efficiency: "85%",
       },
     },
     {
@@ -94,8 +94,8 @@ export function ExperienceSection() {
       ],
       stats: {
         projects: "2+",
-        technologies: "12+",
         impact: "60%",
+        efficiency: "70%",
       },
     },
   ]
@@ -204,19 +204,19 @@ export function ExperienceSection() {
                       </p>
                     </div>
                     <div className="text-center space-y-1">
-                      <div className="text-2xl sm:text-3xl md:text-4xl font-light large-number text-foreground count-up" style={{ animationDelay: '0.2s' }}>
-                        {section.experience.stats.technologies}
-                      </div>
-                      <p className="text-xs text-muted-foreground/60 font-light tracking-wider uppercase">
-                        Technologies
-                      </p>
-                    </div>
-                    <div className="text-center space-y-1">
-                      <div className="text-2xl sm:text-3xl md:text-4xl font-light large-number text-foreground count-up" style={{ animationDelay: '0.4s' }}>
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-light large-number text-primary count-up" style={{ animationDelay: '0.2s' }}>
                         {section.experience.stats.impact}
                       </div>
                       <p className="text-xs text-muted-foreground/60 font-light tracking-wider uppercase">
                         Impact
+                      </p>
+                    </div>
+                    <div className="text-center space-y-1">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-light large-number text-accent count-up" style={{ animationDelay: '0.4s' }}>
+                        {section.experience.stats.efficiency}
+                      </div>
+                      <p className="text-xs text-muted-foreground/60 font-light tracking-wider uppercase">
+                        Efficacité
                       </p>
                     </div>
                   </div>
