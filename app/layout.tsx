@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { LanguageProviderWrapper } from "@/components/language-provider-wrapper"
+import { DevIndicatorProbe } from "@/components/debug/dev-indicator-probe"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -53,6 +54,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans antialiased`}>
         <LanguageProviderWrapper>{children}</LanguageProviderWrapper>
+        {process.env.NODE_ENV === "development" ? <DevIndicatorProbe /> : null}
       </body>
     </html>
   )
