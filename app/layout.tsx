@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { LanguageProviderWrapper } from "@/components/language-provider-wrapper"
 import { DevIndicatorProbe } from "@/components/debug/dev-indicator-probe"
+import { VisitTracker } from "@/components/visit-tracker"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -54,6 +55,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans antialiased`}>
         <LanguageProviderWrapper>{children}</LanguageProviderWrapper>
+        <VisitTracker />
         {process.env.NODE_ENV === "development" ? <DevIndicatorProbe /> : null}
       </body>
     </html>
