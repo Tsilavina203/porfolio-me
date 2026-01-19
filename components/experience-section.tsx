@@ -1,41 +1,14 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import { ExternalLink, Calendar, MapPin } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { useSectionNumber } from "@/hooks/use-section-number"
 
 export function ExperienceSection() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null)
   const { t } = useLanguage()
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const revealElements = entry.target.querySelectorAll('.scroll-trigger')
-            revealElements.forEach((el, index) => {
-              setTimeout(() => {
-                el.classList.add('visible')
-              }, index * 200)
-            })
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
-      }
-    }
-  }, [])
+  const { sectionRef, isVisible, NumberOverlay } = useSectionNumber(4)
 
   const experiences = [
     {
@@ -125,11 +98,15 @@ export function ExperienceSection() {
   ]
 
   return (
-    <section 
-      ref={sectionRef}
-      id="experience" 
-      className="min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative"
-    >
+    <>
+      <NumberOverlay />
+      <section 
+        ref={sectionRef}
+        id="experience" 
+        className={`min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative transition-opacity duration-1000 ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
       {/* Background overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background z-0"></div>
       
@@ -143,18 +120,18 @@ export function ExperienceSection() {
         }}></div>
       </div>
 
-      <div className="max-w-6xl mx-auto w-full relative z-10 space-y-20 sm:space-y-24 md:space-y-32 pl-12 md:pl-20">
+      <div className="max-w-6xl mx-auto w-full relative z-10 space-y-16 sm:space-y-20 md:space-y-24 lg:space-y-32 px-4 sm:px-6 md:pl-12 lg:pl-20">
         
         {/* Main section title */}
         <div className="scroll-trigger relative">
           <div className="section-number text-foreground">
-            2
+            4
           </div>
-          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.9] tracking-tight relative z-10">
-            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>Ascension</span>
-            <span className="block text-muted-foreground/60 text-2xl sm:text-3xl md:text-4xl mt-2 sm:mt-4 font-light stagger-reveal" style={{ animationDelay: '0.3s' }}>du grand jeu</span>
+          <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.9] tracking-tight relative z-10">
+            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>{t.experience.title}</span>
+            <span className="block text-muted-foreground/60 text-xl xs:text-2xl sm:text-3xl md:text-4xl mt-2 sm:mt-3 md:mt-4 font-light stagger-reveal" style={{ animationDelay: '0.3s' }}> {t.experience.subtitle}</span>
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground/70 max-w-2xl mt-6 sm:mt-8 leading-relaxed font-light scroll-trigger">
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/70 max-w-2xl mt-4 sm:mt-6 md:mt-8 leading-relaxed font-light scroll-trigger">
             {t.experience.description}
           </p>
         </div>
@@ -164,17 +141,17 @@ export function ExperienceSection() {
           <div key={sectionIdx} className="scroll-trigger space-y-12 sm:space-y-16">
             
             {/* Section header */}
-            <div className="space-y-4">
-              <div className="flex items-baseline gap-4 sm:gap-6">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-light text-muted-foreground/40 large-number">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex flex-col xs:flex-row items-start xs:items-baseline gap-2 xs:gap-4 sm:gap-6">
+                <span className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-light text-muted-foreground/40 large-number">
                   {section.year}
                 </span>
                 <div className="flex-1">
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-tight">
+                  <h3 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-tight">
                     <span className="block text-foreground">{section.title}</span>
                     <span className="block gradient-animated mt-1 sm:mt-2">{section.subtitle}</span>
                   </h3>
-                  <p className="text-sm sm:text-base text-muted-foreground/60 mt-2 sm:mt-3 font-light tracking-wider uppercase">
+                  <p className="text-xs xs:text-sm sm:text-base text-muted-foreground/60 mt-1.5 xs:mt-2 sm:mt-3 font-light tracking-wider uppercase">
                     {section.description}
                   </p>
                 </div>
@@ -182,40 +159,40 @@ export function ExperienceSection() {
             </div>
 
             {/* Experience content */}
-            <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-start">
+            <div className="grid md:grid-cols-2 gap-6 xs:gap-8 sm:gap-12 items-start">
               
               {/* Left: Narrative */}
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <p className="text-base sm:text-lg md:text-xl text-muted-foreground/80 leading-relaxed font-light">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="space-y-3 sm:space-y-4">
+                  <p className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/80 leading-relaxed font-light">
                     {section.experience.description}
                   </p>
                 </div>
 
                 {/* Stats */}
                 {section.experience.stats && (
-                  <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-6 border-t border-border/20">
-                    <div className="text-center space-y-1">
-                      <div className="text-2xl sm:text-3xl md:text-4xl font-light large-number text-foreground count-up">
+                  <div className="grid grid-cols-3 gap-2 xs:gap-3 sm:gap-4 md:gap-6 pt-4 sm:pt-6 border-t border-border/20">
+                    <div className="text-center space-y-0.5 xs:space-y-1">
+                      <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-light large-number text-foreground count-up">
                         {section.experience.stats.projects}
                       </div>
-                      <p className="text-xs text-muted-foreground/60 font-light tracking-wider uppercase">
+                      <p className="text-[10px] xs:text-xs text-muted-foreground/60 font-light tracking-wider uppercase px-0.5">
                         Projets
                       </p>
                     </div>
-                    <div className="text-center space-y-1">
-                      <div className="text-2xl sm:text-3xl md:text-4xl font-light large-number text-primary count-up" style={{ animationDelay: '0.2s' }}>
+                    <div className="text-center space-y-0.5 xs:space-y-1">
+                      <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-light large-number text-primary count-up" style={{ animationDelay: '0.2s' }}>
                         {section.experience.stats.impact}
                       </div>
-                      <p className="text-xs text-muted-foreground/60 font-light tracking-wider uppercase">
+                      <p className="text-[10px] xs:text-xs text-muted-foreground/60 font-light tracking-wider uppercase px-0.5">
                         Impact
                       </p>
                     </div>
-                    <div className="text-center space-y-1">
-                      <div className="text-2xl sm:text-3xl md:text-4xl font-light large-number text-accent count-up" style={{ animationDelay: '0.4s' }}>
+                    <div className="text-center space-y-0.5 xs:space-y-1">
+                      <div className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-light large-number text-accent count-up" style={{ animationDelay: '0.4s' }}>
                         {section.experience.stats.efficiency}
                       </div>
-                      <p className="text-xs text-muted-foreground/60 font-light tracking-wider uppercase">
+                      <p className="text-[10px] xs:text-xs text-muted-foreground/60 font-light tracking-wider uppercase px-0.5">
                         Efficacité
                       </p>
                     </div>
@@ -224,32 +201,32 @@ export function ExperienceSection() {
               </div>
 
               {/* Right: Details card */}
-              <div className="glass border border-border/30 rounded-lg p-6 sm:p-8 hover:border-primary/50 transition-all duration-500 card-hover">
-                <div className="space-y-4 sm:space-y-6">
-                  <div className="space-y-3">
-                    <h4 className="text-xl sm:text-2xl font-light text-primary leading-tight">
+              <div className="glass border border-border/30 rounded-lg p-4 xs:p-5 sm:p-6 md:p-8 hover:border-primary/50 transition-all duration-500 card-hover">
+                <div className="space-y-3 sm:space-y-4 md:space-y-6">
+                  <div className="space-y-2 sm:space-y-3">
+                    <h4 className="text-lg xs:text-xl sm:text-2xl font-light text-primary leading-tight">
                       {section.experience.role}
                     </h4>
-                    <div className="flex flex-col gap-2 text-sm">
-                      <div className="flex items-center gap-2 text-accent font-medium">
+                    <div className="flex flex-col gap-1.5 xs:gap-2 text-xs xs:text-sm">
+                      <div className="flex items-center gap-1.5 xs:gap-2 text-accent font-medium">
                         <span>{section.experience.company}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="w-4 h-4 flex-shrink-0" />
+                      <div className="flex items-center gap-1.5 xs:gap-2 text-muted-foreground">
+                        <Calendar className="w-3.5 h-3.5 xs:w-4 xs:h-4 flex-shrink-0" />
                         <span>{section.experience.period}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="w-4 h-4 flex-shrink-0" />
+                      <div className="flex items-center gap-1.5 xs:gap-2 text-muted-foreground">
+                        <MapPin className="w-3.5 h-3.5 xs:w-4 xs:h-4 flex-shrink-0" />
                         <span>{section.experience.location}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-border/20">
-                    <h5 className="text-sm font-medium text-primary mb-3">{t.experience.keyAchievements}</h5>
-                    <ul className="space-y-2">
+                  <div className="pt-3 sm:pt-4 border-t border-border/20">
+                    <h5 className="text-xs xs:text-sm font-medium text-primary mb-2 xs:mb-3">{t.experience.keyAchievements}</h5>
+                    <ul className="space-y-1.5 xs:space-y-2">
                       {section.experience.achievements.map((achievement, i) => (
-                        <li key={i} className="flex gap-2 text-sm text-muted-foreground/80">
+                        <li key={i} className="flex gap-1.5 xs:gap-2 text-xs xs:text-sm text-muted-foreground/80">
                           <span className="text-accent font-bold flex-shrink-0 mt-0.5">▸</span>
                           <span className="leading-relaxed font-light">{achievement}</span>
                         </li>
@@ -258,12 +235,12 @@ export function ExperienceSection() {
                   </div>
 
                   {section.experience.link && (
-                    <div className="pt-4">
+                    <div className="pt-3 sm:pt-4">
                       <button
                         onClick={() => setSelectedProject(section.experience.link)}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-transparent border border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 rounded-none font-light tracking-wider transition-all duration-300 text-sm uppercase"
+                        className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 py-1.5 xs:py-2 bg-transparent border border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 rounded-none font-light tracking-wider transition-all duration-300 text-xs xs:text-sm uppercase"
                       >
-                        <ExternalLink className="w-4 h-4" />
+                        <ExternalLink className="w-3.5 h-3.5 xs:w-4 xs:h-4" />
                         {t.experience.viewProject}
                       </button>
                     </div>
@@ -306,5 +283,6 @@ export function ExperienceSection() {
         </div>
       )}
     </section>
+    </>
   )
 }

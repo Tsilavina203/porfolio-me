@@ -29,8 +29,103 @@ export function HeroSection() {
       ref={sectionRef}
       className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 sm:py-32 relative overflow-hidden"
     >
+      {/* Deep background layer - 200m depth effect */}
+      <div className="absolute inset-0 -z-20" style={{ 
+        perspective: '2000px',
+        transformStyle: 'preserve-3d'
+      }}>
+        {/* Sun core - deep in background (200m depth) */}
+        <div 
+          className="absolute bottom-0 left-1/2 -translate-x-1/2"
+          style={{
+            width: 'clamp(400px, 80vw, 800px)',
+            height: 'clamp(400px, 80vw, 800px)',
+            transform: 'translateZ(-200px) translateY(40%)',
+            opacity: 0.5
+          }}
+        >
+          {/* Sun glow layers for depth */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 200, 100, 0.35) 0%, rgba(255, 150, 50, 0.25) 30%, rgba(255, 100, 0, 0.15) 50%, transparent 70%)',
+              filter: 'blur(60px)',
+              animation: 'sunPulse 8s ease-in-out infinite'
+            }}
+          />
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 220, 120, 0.25) 0%, rgba(255, 180, 80, 0.2) 40%, transparent 70%)',
+              filter: 'blur(80px)',
+              animation: 'sunPulse 10s ease-in-out infinite 1s'
+            }}
+          />
+          {/* Main sun disc */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 230, 150, 0.4) 0%, rgba(255, 200, 100, 0.3) 40%, rgba(255, 150, 50, 0.15) 60%, transparent 80%)',
+              filter: 'blur(40px)',
+              animation: 'sunRise 12s ease-out infinite'
+            }}
+          />
+        </div>
+
+        {/* Sun rays - extending outward with depth */}
+        <div 
+          className="absolute bottom-0 left-1/2 -translate-x-1/2"
+          style={{
+            width: 'clamp(600px, 120vw, 1200px)',
+            height: 'clamp(600px, 120vw, 1200px)',
+            transform: 'translateZ(-150px) translateY(35%)',
+            opacity: 0.25
+          }}
+        >
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute inset-0"
+              style={{
+                transform: `rotate(${i * 30}deg)`,
+                transformOrigin: 'center bottom'
+              }}
+            >
+              <div 
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-full"
+                style={{
+                  background: 'linear-gradient(to top, rgba(255, 200, 100, 0.4) 0%, rgba(255, 150, 50, 0.2) 50%, transparent 100%)',
+                  filter: 'blur(2px)',
+                  animation: `rayPulse ${3 + i * 0.2}s ease-in-out infinite ${i * 0.1}s`
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Atmospheric haze layers for depth perception (200m depth effect) */}
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-1/2"
+          style={{
+            background: 'linear-gradient(to top, rgba(255, 200, 100, 0.12) 0%, rgba(255, 150, 50, 0.06) 30%, transparent 70%)',
+            transform: 'translateZ(-100px)',
+            filter: 'blur(100px)',
+            opacity: 0.35
+          }}
+        />
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-1/3"
+          style={{
+            background: 'linear-gradient(to top, rgba(255, 180, 80, 0.15) 0%, transparent 60%)',
+            transform: 'translateZ(-50px)',
+            filter: 'blur(120px)',
+            opacity: 0.25
+          }}
+        />
+      </div>
+
       {/* Background gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-0"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background/85 z-0"></div>
       
       {/* Animated background pattern */}
       <div className="absolute inset-0 -z-10 opacity-[0.03]">
@@ -49,9 +144,9 @@ export function HeroSection() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      <div className={`max-w-7xl w-full relative z-10 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>
+      <div className={`max-w-7xl w-full relative z-20 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>
         {/* Main content */}
-        <div className="text-center space-y-8 sm:space-y-12 md:space-y-16">
+        <div className="text-center space-y-8 sm:space-y-12 md:space-y-16 relative">
           
           {/* Tagline - small text at top */}
           <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
@@ -61,20 +156,20 @@ export function HeroSection() {
           </div>
 
           {/* Large split title - inspired by "Né Pour Briller" */}
-          <div className="space-y-2 sm:space-y-4">
-            <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light leading-[0.9] tracking-tight">
+          <div className="space-y-1 sm:space-y-2 md:space-y-4">
+            <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-light leading-[0.9] tracking-tight">
               <div className="split-text overflow-hidden">
                 <span style={{ animationDelay: '0.4s' }} className="block text-foreground stagger-reveal">
                   {t.hero.titleLine1 || "Né Pour"}
                 </span>
               </div>
               <div className="split-text overflow-hidden">
-                <span style={{ animationDelay: '0.6s' }} className="block text-foreground mt-2 sm:mt-4 stagger-reveal">
+                <span style={{ animationDelay: '0.6s' }} className="block text-foreground mt-1 sm:mt-2 md:mt-4 stagger-reveal">
                   {t.hero.titleLine2 || "Briller"}
                 </span>
               </div>
               <div className="split-text overflow-hidden">
-                <span style={{ animationDelay: '0.8s' }} className="block gradient-animated mt-2 sm:mt-4 stagger-reveal">
+                <span style={{ animationDelay: '0.8s' }} className="block gradient-animated mt-1 sm:mt-2 md:mt-4 stagger-reveal">
                   {t.hero.titleLine3 || "dans l'IA"}
                 </span>
               </div>
@@ -100,28 +195,28 @@ export function HeroSection() {
           </div>
 
           {/* Stats - Large numbers display */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-8 md:gap-12 pt-12 sm:pt-16 md:pt-20 border-t border-border/30 max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: '1.4s' }}>
-            <div className="text-center space-y-2">
-              <div className="number-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light large-number text-foreground opacity-0">
+          <div className="grid grid-cols-3 gap-2 xs:gap-3 sm:gap-6 md:gap-8 lg:gap-12 pt-8 sm:pt-12 md:pt-16 lg:pt-20 border-t border-border/40 max-w-4xl mx-auto animate-fade-in relative z-20" style={{ animationDelay: '1.4s' }}>
+            <div className="text-center space-y-1 sm:space-y-2">
+              <div className="number-display text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light large-number text-foreground opacity-0 drop-shadow-lg">
                 3
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground/60 font-light tracking-wider uppercase">
+              <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground/80 font-light tracking-wider uppercase px-1">
                 {t.hero.yearsExperience}
               </p>
             </div>
-            <div className="text-center space-y-2">
-              <div className="number-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light large-number text-foreground opacity-0">
+            <div className="text-center space-y-1 sm:space-y-2">
+              <div className="number-display text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light large-number text-foreground opacity-0 drop-shadow-lg">
                 10+
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground/60 font-light tracking-wider uppercase">
+              <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground/80 font-light tracking-wider uppercase px-1">
                 {t.hero.projectsDelivered}
               </p>
             </div>
-            <div className="text-center space-y-2">
-              <div className="number-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light large-number text-foreground opacity-0">
+            <div className="text-center space-y-1 sm:space-y-2">
+              <div className="number-display text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light large-number text-foreground opacity-0 drop-shadow-lg">
                 30+
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground/60 font-light tracking-wider uppercase">
+              <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground/80 font-light tracking-wider uppercase px-1">
                 {t.hero.technologies}
               </p>
             </div>

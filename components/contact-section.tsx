@@ -1,46 +1,22 @@
 "use client"
 
-import { useEffect, useRef } from "react"
 import { useLanguage } from "@/contexts/language-context"
+import { useSectionNumber } from "@/hooks/use-section-number"
 
 export function ContactSection() {
   const { t } = useLanguage()
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const revealElements = entry.target.querySelectorAll('.scroll-trigger')
-            revealElements.forEach((el, index) => {
-              setTimeout(() => {
-                el.classList.add('visible')
-              }, index * 150)
-            })
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
-      }
-    }
-  }, [])
+  const { sectionRef, isVisible, NumberOverlay } = useSectionNumber(5)
 
   return (
-    <section 
-      ref={sectionRef}
-      id="contact" 
-      className="min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative flex items-center"
-    >
+    <>
+      <NumberOverlay />
+      <section 
+        ref={sectionRef}
+        id="contact" 
+        className={`min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative flex items-center transition-opacity duration-1000 ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
       {/* Background overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background z-0"></div>
       
@@ -54,18 +30,18 @@ export function ContactSection() {
         }}></div>
       </div>
 
-      <div className="max-w-6xl mx-auto w-full relative z-10 space-y-16 sm:space-y-20 md:space-y-24 pl-12 md:pl-20">
+      <div className="max-w-6xl mx-auto w-full relative z-10 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 px-4 sm:px-6 md:pl-12 lg:pl-20">
         {/* Section number */}
         <div className="section-number text-foreground">
           5
         </div>
 
         <div className="scroll-trigger relative z-10 text-center">
-          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.9] tracking-tight">
+          <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.9] tracking-tight">
             <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>Contact</span>
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground/70 max-w-2xl mx-auto mt-6 sm:mt-8 leading-relaxed font-light scroll-trigger">
-            {t.contact.description}
+          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/70 max-w-2xl mx-auto mt-4 sm:mt-6 md:mt-8 leading-relaxed font-light scroll-trigger">
+             {t.contact.description}
           </p>
         </div>
 
@@ -81,39 +57,40 @@ export function ContactSection() {
           </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 scroll-trigger">
-          <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
-            <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.email}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6 md:gap-8 scroll-trigger">
+          <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
+            <div className="text-[10px] xs:text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-1.5 xs:mb-2">{t.contact.email}</div>
             <a
               href="mailto:andriatafitasoa203@gmail.com"
-              className="text-sm sm:text-base text-foreground hover:text-primary transition-colors break-all font-light"
+              className="text-xs xs:text-sm sm:text-base text-foreground hover:text-primary transition-colors break-all font-light"
             >
               andriatafitasoa203@gmail.com
             </a>
           </div>
-          <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-accent/50 transition-all duration-500 card-hover">
-            <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.phone}</div>
+          <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-accent/50 transition-all duration-500 card-hover">
+            <div className="text-[10px] xs:text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-1.5 xs:mb-2">{t.contact.phone}</div>
             <a
               href="tel:+261386822498"
-              className="text-sm sm:text-base text-foreground hover:text-primary transition-colors font-light"
+              className="text-xs xs:text-sm sm:text-base text-foreground hover:text-primary transition-colors font-light"
             >
               +261 38 68 224 98
             </a>
           </div>
-          <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
-            <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.location}</div>
-            <p className="text-sm sm:text-base text-foreground font-light">Madagascar</p>
+          <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
+            <div className="text-[10px] xs:text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-1.5 xs:mb-2">{t.contact.location}</div>
+            <p className="text-xs xs:text-sm sm:text-base text-foreground font-light">Madagascar</p>
           </div>
-          <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
-            <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.nif}</div>
-            <p className="text-sm sm:text-base text-foreground font-light">7019388860</p>
+          <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
+            <div className="text-[10px] xs:text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-1.5 xs:mb-2">{t.contact.nif}</div>
+            <p className="text-xs xs:text-sm sm:text-base text-foreground font-light">7019388860</p>
           </div>
-          <div className="space-y-2 p-4 sm:p-6 glass border border-border/30 hover:border-accent/50 transition-all duration-500 card-hover">
-            <div className="text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-2">{t.contact.stat}</div>
-            <p className="text-sm sm:text-base text-foreground font-light">74908 21 2025 0 01129</p>
+          <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-accent/50 transition-all duration-500 card-hover">
+            <div className="text-[10px] xs:text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-1.5 xs:mb-2">{t.contact.stat}</div>
+            <p className="text-xs xs:text-sm sm:text-base text-foreground font-light">74908 21 2025 0 01129</p>
           </div>
         </div>
       </div>
     </section>
+    </>
   )
 }

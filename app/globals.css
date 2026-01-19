@@ -599,3 +599,59 @@ section[id] {
   background-clip: text;
   animation: gradientShift 8s ease infinite;
 }
+
+/* Sun animations for deep background effect */
+@keyframes sunPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes sunRise {
+  0% {
+    opacity: 0.3;
+    transform: translateY(10%) scale(0.95);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(5%) scale(1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: translateY(0%) scale(1.02);
+  }
+}
+
+@keyframes rayPulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scaleY(1.1);
+  }
+}
+
+/* Section number reveal animation */
+@keyframes numberReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}

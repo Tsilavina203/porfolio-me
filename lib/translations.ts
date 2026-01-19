@@ -38,6 +38,7 @@ export const translations = {
     },
     experience: {
       title: "Professional Experience",
+      subtitle: "the big game",
       description: "~3 years building data systems and AI solutions in innovative companies",
       keyAchievements: "Key Achievements:",
       viewProject: "View Project",
