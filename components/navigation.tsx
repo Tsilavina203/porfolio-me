@@ -43,7 +43,7 @@ export function Navigation() {
             >
               <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-foreground/20 group-hover:border-primary/50 transition-all duration-300 shadow-lg group-hover:shadow-primary/20">
                 <Image
-                  src="/placeholder-user.jpg"
+                  src="/tsilavo.png"
                   alt="Tantely"
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-300"
