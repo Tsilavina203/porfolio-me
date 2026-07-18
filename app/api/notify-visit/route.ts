@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-// Vérifier que la clé API est configurée au démarrage
-if (!process.env.RESEND_API_KEY) {
+// Vérifier que la clé API est configurée au démarrage (production uniquement)
+if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === 'production') {
   console.error('⚠️ RESEND_API_KEY n\'est pas configurée dans les variables d\'environnement')
 }
 
@@ -12,6 +12,14 @@ export async function POST(request: NextRequest) {
   try {
     // Vérifier que la clé API est présente
     if (!process.env.RESEND_API_KEY || !resend) {
+      if (process.env.NODE_ENV === 'development') {
+        return NextResponse.json({
+          success: true,
+          skipped: true,
+          message: 'Notification désactivée en local (RESEND_API_KEY absente)',
+        })
+      }
+
       console.error('❌ RESEND_API_KEY manquante - Email non envoyé')
       return NextResponse.json(
         { 

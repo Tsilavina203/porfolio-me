@@ -1,13 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import { LanguageProviderWrapper } from "@/components/language-provider-wrapper"
 import { DevIndicatorProbe } from "@/components/debug/dev-indicator-probe"
 import { VisitTracker } from "@/components/visit-tracker"
 import "./globals.css"
-
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Tanteliniaina - Data Engineer & AI Engineer | Portfolio",
