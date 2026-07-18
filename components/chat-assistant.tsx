@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { MessageCircle, Send, X } from "lucide-react"
+import { Bot, MessageCircle, Send, X } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useChatAssistant } from "@/hooks/use-chat-assistant"
 import { profile } from "@/lib/content/profile"
@@ -164,14 +164,12 @@ export function ChatAssistant() {
                 </h2>
                 <p className="text-[11px] text-muted-foreground mt-0.5">{t.chat.subtitle}</p>
               </div>
-              <button
-                type="button"
-                onClick={() => closeAssistant()}
-                className="chat-close-btn flex items-center justify-center w-8 h-8 rounded-full border transition-all shrink-0"
-                aria-label={t.chat.closeLabel}
+              <div
+                className="chat-robot-icon flex items-center justify-center w-8 h-8 rounded-full border shrink-0"
+                aria-hidden
               >
-                <X className="w-4 h-4" strokeWidth={2} />
-              </button>
+                <Bot className="w-4 h-4" strokeWidth={2} />
+              </div>
             </div>
           </div>
 

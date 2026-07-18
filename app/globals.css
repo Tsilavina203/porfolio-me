@@ -1351,18 +1351,10 @@ section[id] {
     0 4px 20px oklch(0 0 0 / 0.35);
 }
 
-.chat-close-btn {
+.chat-robot-icon {
   border-color: oklch(0.78 0.14 85 / 0.35);
   background: oklch(0.78 0.14 85 / 0.08);
   color: oklch(0.88 0.1 92);
-}
-
-.chat-close-btn:hover {
-  border-color: oklch(0.78 0.14 85 / 0.6);
-  background: oklch(0.78 0.14 85 / 0.16);
-  color: oklch(0.98 0.06 98);
-  transform: scale(1.05);
-  box-shadow: 0 0 10px oklch(0.78 0.14 85 / 0.3);
 }
 
 .chat-bubble__pulse {
