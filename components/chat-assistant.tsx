@@ -147,7 +147,7 @@ export function ChatAssistant() {
           className="chat-bubble chat-bubble--close fixed bottom-6 right-6 z-[91] flex items-center justify-center w-14 h-14 rounded-full glass border shadow-lg transition-all duration-300 hover:scale-105"
           aria-label={t.chat.closeLabel}
         >
-          <X className="w-6 h-6 relative z-10" />
+          <X className="w-5 h-5 relative z-10" strokeWidth={2.25} />
         </button>
       )}
 
@@ -167,11 +167,10 @@ export function ChatAssistant() {
               <button
                 type="button"
                 onClick={() => closeAssistant()}
-                className="chat-close-btn flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-full border transition-colors shrink-0"
+                className="chat-close-btn flex items-center justify-center w-8 h-8 rounded-full border transition-all shrink-0"
                 aria-label={t.chat.closeLabel}
               >
-                <X className="w-3.5 h-3.5" />
-                <span className="text-[11px] font-medium">{t.chat.closeLabel}</span>
+                <X className="w-4 h-4" strokeWidth={2} />
               </button>
             </div>
           </div>
