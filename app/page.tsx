@@ -7,11 +7,13 @@ import { ContactSection } from "@/components/contact-section"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { ScrollProgress } from "@/components/scroll-progress"
+import { ChatAssistantLoader } from "@/components/chat-assistant-loader"
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
       <ScrollProgress />
+      <ChatAssistantLoader />
       <Navigation />
       <main className="relative z-10">
         <HeroSection />

@@ -1,96 +1,79 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { SectionTransitionOverlay } from "@/components/section-transition-overlay"
+import { SectionMarker } from "@/components/section-marker"
+import type { SectionId } from "@/lib/section-transitions"
 
-export function useSectionNumber(sectionNumber: number) {
-  const [showNumber, setShowNumber] = useState(false)
-  const [hideNumber, setHideNumber] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+export function useSectionTransition(sectionId: SectionId) {
   const sectionRef = useRef<HTMLElement>(null)
-  const numberRef = useRef<HTMLDivElement>(null)
+  const [showTransition, setShowTransition] = useState(false)
+  const [hideTransition, setHideTransition] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hasPlayedRef = useRef(false)
 
   useEffect(() => {
+    const node = sectionRef.current
+    if (!node) return
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Show the big number first
-            setShowNumber(true)
-            
-            // After a delay, hide the number and show content
-            setTimeout(() => {
-              setHideNumber(true)
+            if (timeoutRef.current) clearTimeout(timeoutRef.current)
+
+            setShowTransition(true)
+            setHideTransition(false)
+            hasPlayedRef.current = true
+
+            timeoutRef.current = setTimeout(() => {
+              setHideTransition(true)
               setIsVisible(true)
-              
-              // Add active class to reveal elements
-              const revealElements = entry.target.querySelectorAll('.scroll-trigger')
-              revealElements.forEach((el, index) => {
-                setTimeout(() => {
-                  el.classList.add('visible')
-                }, index * 150)
+
+              entry.target.querySelectorAll(".scroll-trigger").forEach((el, index) => {
+                setTimeout(() => el.classList.add("visible"), index * 150)
               })
-            }, 1200) // Show number for 1.2 seconds
-          } else {
-            // Reset when leaving viewport
-            setShowNumber(false)
-            setHideNumber(false)
+            }, 1400)
+          } else if (hasPlayedRef.current) {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current)
+            setShowTransition(false)
+            setHideTransition(false)
             setIsVisible(false)
+            entry.target.querySelectorAll(".scroll-trigger").forEach((el) => {
+              el.classList.remove("visible")
+            })
           }
         })
       },
-      { threshold: 0.05 }
+      { threshold: 0.12 }
     )
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
+    observer.observe(node)
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      observer.disconnect()
     }
   }, [])
 
-  const NumberOverlay = () => {
-    if (!showNumber) return null
-    
-    return (
-      <div 
-        ref={numberRef}
-        className={`fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm transition-all duration-1000 ${
-          hideNumber ? 'opacity-0 scale-150 pointer-events-none' : 'opacity-100 scale-100'
-        }`}
-        style={{
-          transition: 'opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
-        }}
-      >
-        <div 
-          className={`relative text-[35vw] sm:text-[28vw] md:text-[22vw] lg:text-[18vw] xl:text-[15vw] font-extralight transition-all duration-1200 ${
-            hideNumber 
-              ? 'opacity-0 scale-200 blur-2xl text-foreground/0' 
-              : 'opacity-100 scale-100 blur-0 text-foreground/15'
-          }`}
-          style={{
-            textShadow: '0 0 150px rgba(255, 255, 255, 0.15), 0 0 300px rgba(255, 255, 255, 0.1)',
-            letterSpacing: '-0.08em',
-            lineHeight: '0.75',
-            fontVariantNumeric: 'tabular-nums',
-            animation: hideNumber ? 'none' : 'numberReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards'
-          }}
-        >
-          {sectionNumber}
-        </div>
-      </div>
-    )
+  const TransitionOverlay = () => {
+    if (!showTransition) return null
+    return <SectionTransitionOverlay sectionId={sectionId} hide={hideTransition} />
   }
+
+  const Marker = () => <SectionMarker sectionId={sectionId} />
 
   return {
     sectionRef,
-    showNumber,
-    hideNumber,
     isVisible,
-    NumberOverlay
+    TransitionOverlay,
+    SectionMarker: Marker,
+
+    NumberOverlay: TransitionOverlay,
   }
 }
 
+export function useSectionNumber(sectionId: SectionId) {
+  return useSectionTransition(sectionId)
+}

@@ -10,7 +10,7 @@ export function useScrollReveal(options?: IntersectionObserverInit) {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true)
-            // Add visible class to reveal elements
+
             const revealElements = entry.target.querySelectorAll('.scroll-trigger')
             revealElements.forEach((el, index) => {
               setTimeout(() => {

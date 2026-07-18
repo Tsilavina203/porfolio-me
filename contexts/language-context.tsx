@@ -19,7 +19,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true)
-    // Load language from localStorage or default to "en"
+
     const savedLanguage = localStorage.getItem("language") as Language | null
     if (savedLanguage && (savedLanguage === "en" || savedLanguage === "fr")) {
       setLanguageState(savedLanguage)
@@ -35,7 +35,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const t = translations[language]
 
-  // Prevent hydration mismatch by using default language until mounted
   if (!mounted) {
     return (
       <LanguageContext.Provider value={{ language: "en", setLanguage, t: translations.en }}>

@@ -1,6 +1,4 @@
-/**
- * Scroll reveal utility for animating elements on scroll
- */
+
 export function initScrollReveal() {
   if (typeof window === 'undefined') return
 

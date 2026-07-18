@@ -6,19 +6,17 @@ export function VisitTracker() {
   const hasNotified = useRef(false)
 
   useEffect(() => {
-    // Ne notifier qu'une fois par session
+
     if (hasNotified.current) return
 
-    // Attendre un peu pour s'assurer que la page est chargée
     const timer = setTimeout(() => {
-      // Récupérer les informations du visiteur
+
       const userAgent = typeof window !== "undefined" ? window.navigator.userAgent : ""
       const referer = typeof document !== "undefined" ? document.referrer : ""
       const timestamp = Date.now()
 
       console.log('🔔 Notification de visite déclenchée')
 
-      // Appeler l'API pour envoyer l'email
       fetch("/api/notify-visit", {
         method: "POST",
         headers: {
@@ -32,7 +30,7 @@ export function VisitTracker() {
       })
         .then(async (response) => {
           const data = await response.json()
-          
+
           if (!response.ok) {
             console.error("❌ Erreur lors de l'envoi de la notification:", data)
             console.error("❌ Détails:", data.message || data.error)
@@ -47,12 +45,11 @@ export function VisitTracker() {
         })
 
       hasNotified.current = true
-    }, 2000) // Attendre 2 secondes après le chargement
+    }, 2000)
 
     return () => clearTimeout(timer)
   }, [])
 
-  // Ce composant ne rend rien visuellement
   return null
 }
 

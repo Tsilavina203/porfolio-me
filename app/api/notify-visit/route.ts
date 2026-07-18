@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-// Vérifier que la clé API est configurée au démarrage
-if (!process.env.RESEND_API_KEY) {
+if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === 'production') {
   console.error('⚠️ RESEND_API_KEY n\'est pas configurée dans les variables d\'environnement')
 }
 
@@ -10,13 +9,21 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 
 export async function POST(request: NextRequest) {
   try {
-    // Vérifier que la clé API est présente
+
     if (!process.env.RESEND_API_KEY || !resend) {
+      if (process.env.NODE_ENV === 'development') {
+        return NextResponse.json({
+          success: true,
+          skipped: true,
+          message: 'Notification désactivée en local (RESEND_API_KEY absente)',
+        })
+      }
+
       console.error('❌ RESEND_API_KEY manquante - Email non envoyé')
       return NextResponse.json(
-        { 
-          error: 'Configuration manquante', 
-          message: 'RESEND_API_KEY n\'est pas configurée. Veuillez l\'ajouter dans les variables d\'environnement sur Render.' 
+        {
+          error: 'Configuration manquante',
+          message: 'RESEND_API_KEY n\'est pas configurée. Veuillez l\'ajouter dans les variables d\'environnement sur Render.'
         },
         { status: 500 }
       )
@@ -24,8 +31,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const { userAgent, referer, timestamp } = body
-    
-    // Récupérer l'IP depuis les headers
+
     const forwarded = request.headers.get('x-forwarded-for')
     const realIp = request.headers.get('x-real-ip')
     const ip = forwarded?.split(',')[0] || realIp || 'Non disponible'
@@ -34,7 +40,6 @@ export async function POST(request: NextRequest) {
     console.log('📧 Destinataire: andriatafitasoa203@gmail.com')
     console.log('📧 Date: ', new Date(timestamp).toLocaleString('fr-FR', { timeZone: 'Indian/Antananarivo' }))
 
-    // Envoyer l'email de notification
     const { data, error } = await resend.emails.send({
       from: 'Portfolio Notification <onboarding@resend.dev>',
       to: ['andriatafitasoa203@gmail.com'],
@@ -68,8 +73,8 @@ Quelqu'un a visité votre portfolio sur https://porfolio-me.onrender.com
     if (error) {
       console.error('❌ Erreur lors de l\'envoi de l\'email:', JSON.stringify(error, null, 2))
       return NextResponse.json(
-        { 
-          error: 'Erreur lors de l\'envoi de l\'email', 
+        {
+          error: 'Erreur lors de l\'envoi de l\'email',
           details: error,
           message: 'L\'email n\'a pas pu être envoyé. Vérifiez votre clé API Resend et les logs pour plus de détails.'
         },
@@ -80,15 +85,15 @@ Quelqu'un a visité votre portfolio sur https://porfolio-me.onrender.com
     if (data?.id) {
       console.log('✅ Email envoyé avec succès!')
       console.log('✅ Message ID:', data.id)
-      return NextResponse.json({ 
-        success: true, 
+      return NextResponse.json({
+        success: true,
         messageId: data.id,
         message: 'Email envoyé avec succès à andriatafitasoa203@gmail.com'
       })
     } else {
       console.error('⚠️ Email envoyé mais pas de message ID retourné')
-      return NextResponse.json({ 
-        success: false, 
+      return NextResponse.json({
+        success: false,
         message: 'Email peut-être envoyé mais confirmation incertaine'
       }, { status: 200 })
     }
@@ -96,7 +101,7 @@ Quelqu'un a visité votre portfolio sur https://porfolio-me.onrender.com
   } catch (error) {
     console.error('❌ Erreur dans l\'API notify-visit:', error)
     return NextResponse.json(
-      { 
+      {
         error: 'Erreur serveur',
         message: error instanceof Error ? error.message : 'Erreur inconnue',
         details: error

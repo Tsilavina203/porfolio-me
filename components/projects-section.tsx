@@ -4,71 +4,31 @@ import { useState } from "react"
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useSectionNumber } from "@/hooks/use-section-number"
+import { projects as projectsData } from "@/lib/content/projects"
 
 export function ProjectsSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const { t } = useLanguage()
-  const { sectionRef, isVisible, NumberOverlay } = useSectionNumber(3)
-  const projects = [
-    {
-      title: "Swiftask Technology",
-      description: "AI-powered task automation platform for enterprise workflow optimization.",
-      problem: "Manual task management consuming significant time and resources.",
-      solution: "Built comprehensive AI automation system with intelligent task routing and execution.",
-      impact: "Streamlined workflows, enhanced productivity across teams",
-      stack: ["LLMs", "FastAPI", "Python", "React", "Database Design"],
-      link: "https://www.swiftask.ai/fr-fr",
-    },
-    {
-      title: "Quark Development - OIA Project",
-      description: "Intelligent automation platform integrating AI capabilities for business process optimization.",
-      problem: "Complex business processes requiring manual intervention and coordination.",
-      solution: "Developed OIA (Open Intelligence Architecture) with AI agents and workflow automation.",
-      impact: "Reduced manual processes by 75%, improved efficiency",
-      stack: ["LangGraph", "LLMs", "FastAPI", "React", "Automation"],
-      link: "https://oia.quark-developpement.com/",
-    },
-    {
-      title: "Akata Goavana",
-      description: "Web platform for logistics and supply chain management with real-time tracking.",
-      problem: "Lack of visibility in supply chain operations and manual coordination.",
-      solution: "Built full-stack platform with real-time tracking, analytics, and automation.",
-      impact: "Improved supply chain visibility, reduced operational costs",
-      stack: ["React", "FastAPI", "Python", "PostgreSQL", "Real-time Systems"],
-      link: "https://www.akata-goavana.com/fr",
-    },
-    {
-      title: "RAG System for Legal Documents",
-      description:
-        "Developed a Retrieval Augmented Generation system for processing and analyzing legal documents with French language support.",
-      problem: "Manual document review taking significant time. Limited language support for French content.",
-      solution:
-        "Implemented RAG pipeline with LangChain, vector databases (Qdrant), and LLM integration for French language QA.",
-      impact: "Reduced document review time, improved accuracy for multilingual content",
-      stack: ["LangChain", "LLMs", "Qdrant", "FastAPI", "Python"],
-    },
-    {
-      title: "Multimodal LLM Agent",
-      description: "Built an autonomous AI agent integrating text, image, audio, and video processing capabilities.",
-      problem: "Need for intelligent automation across multiple data types. Complex manual workflows.",
-      solution: "Developed multimodal agent using advanced LLMs with LangGraph for orchestration and state management.",
-      impact: "Automated complex workflows, reduced manual intervention by 80%",
-      stack: ["LLMs", "LangGraph", "Computer Vision", "Audio Processing", "FastAPI"],
-    },
-    {
-      title: "ETL Pipeline for Data Integration",
-      description:
-        "Designed and implemented scalable ETL pipeline for ingesting, cleaning, and normalizing structured and unstructured data.",
-      problem: "Data quality issues, slow processing, inconsistent formats.",
-      solution:
-        "Built automated ETL with data validation, error handling, and monitoring using Python and data engineering best practices.",
-      impact: "Improved data quality by 95%, reduced processing time by 70%",
-      stack: ["Python", "Pandas", "Data Cleaning", "Qdrant", "Docker"],
-    },
-  ]
+  const { t, language } = useLanguage()
+  const lang = language as "fr" | "en"
+  const { sectionRef, isVisible, TransitionOverlay, SectionMarker } = useSectionNumber("projects")
+
+  const projects = projectsData
+    .filter((p) => p.featured)
+    .map((p) => ({
+      title: p.title,
+      description: p.description[lang],
+      problem: p.problem[lang],
+      solution: p.solution[lang],
+      impact: p.impact[lang],
+      stack: p.stack,
+      link: p.link,
+    }))
 
   const projectsPerSlide = 2
   const totalSlides = Math.ceil(projects.length / projectsPerSlide)
+  const hasMultipleSlides = totalSlides > 1
+  const canGoNext = currentIndex < totalSlides - 1
+  const canGoPrevious = currentIndex > 0
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? totalSlides - 1 : prev - 1))
@@ -85,18 +45,16 @@ export function ProjectsSection() {
 
   return (
     <>
-      <NumberOverlay />
-      <section 
+      <TransitionOverlay />
+      <section
         ref={sectionRef}
-        id="projects" 
+        id="projects"
         className={`min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative flex items-center transition-opacity duration-1000 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
-      {/* Background overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background z-0"></div>
-      
-      {/* Subtle background pattern */}
+
       <div className="absolute inset-0 -z-10 opacity-[0.02]">
         <div className="absolute inset-0" style={{
           backgroundImage: `
@@ -107,15 +65,11 @@ export function ProjectsSection() {
       </div>
 
       <div className="max-w-6xl mx-auto w-full relative z-10 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 px-4 sm:px-6 md:pl-12 lg:pl-20">
-        {/* Section number */}
-        <div className="section-number text-foreground">
-          3
-        </div>
+        <SectionMarker />
 
-        {/* Section title - Large and split */}
         <div className="scroll-trigger relative z-10">
           <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.9] tracking-tight">
-            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>Projets</span>
+            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>{t.projects.title}</span>
           </h2>
           <p className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/70 max-w-2xl mt-4 sm:mt-6 md:mt-8 leading-relaxed font-light scroll-trigger">
              {t.projects.description}
@@ -123,22 +77,40 @@ export function ProjectsSection() {
         </div>
 
         <div className="relative">
-          <button
-            onClick={goToPrevious}
-            className="absolute left-0 sm:left-2 md:left-0 top-1/2 -translate-y-1/2 z-10 glass border border-border/50 rounded-full p-1.5 xs:p-2 sm:p-2 hover:border-primary/50 transition-all duration-300 shadow-lg -translate-x-1/2 sm:-translate-x-2 md:-translate-x-4 lg:-translate-x-8 hover-lift hover-glow"
-            aria-label="Previous projects"
-          >
-            <ChevronLeft className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 text-primary" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="absolute right-0 sm:right-2 md:right-0 top-1/2 -translate-y-1/2 z-10 glass border border-border/50 rounded-full p-1.5 xs:p-2 sm:p-2 hover:border-primary/50 transition-all duration-300 shadow-lg translate-x-1/2 sm:translate-x-2 md:translate-x-4 lg:translate-x-8 hover-lift hover-glow"
-            aria-label="Next projects"
-          >
-            <ChevronRight className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 text-primary" />
-          </button>
+          {hasMultipleSlides && canGoPrevious && (
+            <div className="carousel-scroll-fade carousel-scroll-fade--left hidden sm:block" aria-hidden />
+          )}
+          {hasMultipleSlides && canGoNext && (
+            <div className="carousel-scroll-fade carousel-scroll-fade--right hidden sm:block" aria-hidden />
+          )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 sm:gap-6">
+          {hasMultipleSlides && (
+            <button
+              onClick={goToPrevious}
+              className={`carousel-nav-btn absolute left-0 sm:left-2 md:left-0 top-1/2 -translate-y-1/2 z-10 glass border border-border/50 rounded-full p-2 xs:p-2.5 sm:p-3 hover:border-primary/50 transition-all duration-300 shadow-lg -translate-x-1/2 sm:-translate-x-2 md:-translate-x-4 lg:-translate-x-8 hover-lift hover-glow ${
+                canGoPrevious ? "carousel-nav-btn--hint carousel-nav-btn--prev-hint" : ""
+              }`}
+              aria-label={t.projects.previousProjects}
+            >
+              <ChevronLeft className="carousel-nav-icon w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-primary" />
+            </button>
+          )}
+          {hasMultipleSlides && (
+            <button
+              onClick={goToNext}
+              className={`carousel-nav-btn absolute right-0 sm:right-2 md:right-0 top-1/2 -translate-y-1/2 z-10 glass border border-border/50 rounded-full p-2 xs:p-2.5 sm:p-3 hover:border-primary/50 transition-all duration-300 shadow-lg translate-x-1/2 sm:translate-x-2 md:translate-x-4 lg:translate-x-8 hover-lift hover-glow ${
+                canGoNext ? "carousel-nav-btn--hint carousel-nav-btn--next-hint" : ""
+              }`}
+              aria-label={t.projects.nextProjects}
+            >
+              <ChevronRight className="carousel-nav-icon w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-primary" />
+            </button>
+          )}
+
+          <div
+            key={currentIndex}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 sm:gap-6 carousel-slide-enter"
+          >
             {getVisibleProjects().map((project, idx) => (
               <div
                 key={currentIndex * projectsPerSlide + idx}
@@ -191,19 +163,27 @@ export function ProjectsSection() {
             ))}
           </div>
 
-          {/* Pagination dots */}
-          <div className="flex justify-center gap-2 mt-8">
-            {Array.from({ length: totalSlides }).map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentIndex(idx)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  idx === currentIndex ? "bg-primary w-8" : "bg-border hover:bg-primary/50"
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
+          {hasMultipleSlides && (
+            <div className="flex flex-col items-center gap-3 mt-8">
+              <p className="text-xs sm:text-sm text-primary/80 font-medium animate-pulse">
+                {t.projects.scrollHint}
+              </p>
+              <div className="flex justify-center gap-2">
+                {Array.from({ length: totalSlides }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      idx === currentIndex
+                        ? "bg-primary w-8 shadow-[0_0_12px_oklch(0.65_0.2_250/0.5)]"
+                        : "w-2 bg-border hover:bg-primary/50"
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
