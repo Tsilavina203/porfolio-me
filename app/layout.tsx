@@ -1,18 +1,17 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { LanguageProviderWrapper } from "@/components/language-provider-wrapper"
-import { DevIndicatorProbe } from "@/components/debug/dev-indicator-probe"
 import { VisitTracker } from "@/components/visit-tracker"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Tanteliniaina - Data Engineer & AI Engineer | Portfolio",
+  title: "Tanteliniaina Andriatafitasoa — Data Engineer IA & Fullstack Developer",
   description:
-    "Data Engineer & AI Engineer specializing in ETL/ELT pipelines, LLMs, RAG systems, and Agentic AI. ~3 years building intelligent data infrastructure.",
+    "Data Engineer IA confirmé (4 ans). Pipelines Data, RAG, LLMs, agents IA et backends scalables. FastAPI, Python, ETL/ELT, déploiement production.",
   authors: [
     {
-      name: "ANDRIATAFITASOA Tanteliniaina Tsilavo",
-      url: "https://github.com",
+      name: "ANDRIATAFITASOA Tanteliniaina Jean Claude",
+      url: "https://www.linkedin.com/in/andriatafitasoa-5484742a8/",
     },
   ],
   keywords: [
@@ -27,9 +26,9 @@ export const metadata: Metadata = {
     "Generative AI",
   ],
   openGraph: {
-    title: "Tanteliniaina - Data Engineer & AI Engineer",
+    title: "Tanteliniaina — Data Engineer IA & Fullstack Developer",
     description:
-      "Specializing in ETL/ELT pipelines, LLMs, RAG systems, and Agentic AI. Building intelligent data infrastructure.",
+      "4 ans d'expérience en pipelines Data, RAG, LLMs et backends scalables. Open to remote opportunities.",
     type: "website",
   },
   icons: {
@@ -48,11 +47,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
         <LanguageProviderWrapper>{children}</LanguageProviderWrapper>
         <VisitTracker />
-        {process.env.NODE_ENV === "development" ? <DevIndicatorProbe /> : null}
       </body>
     </html>
   )

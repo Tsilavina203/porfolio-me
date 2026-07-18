@@ -2,25 +2,24 @@
 
 import { useLanguage } from "@/contexts/language-context"
 import { useSectionNumber } from "@/hooks/use-section-number"
+import { profile } from "@/lib/content/profile"
 
 export function ContactSection() {
   const { t } = useLanguage()
-  const { sectionRef, isVisible, NumberOverlay } = useSectionNumber(5)
+  const { sectionRef, isVisible, TransitionOverlay, SectionMarker } = useSectionNumber("contact")
 
   return (
     <>
-      <NumberOverlay />
-      <section 
+      <TransitionOverlay />
+      <section
         ref={sectionRef}
-        id="contact" 
+        id="contact"
         className={`min-h-screen py-20 sm:py-32 px-4 sm:px-6 relative flex items-center transition-opacity duration-1000 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
-      {/* Background overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/98 to-background z-0"></div>
-      
-      {/* Subtle background pattern */}
+
       <div className="absolute inset-0 -z-10 opacity-[0.02]">
         <div className="absolute inset-0" style={{
           backgroundImage: `
@@ -31,14 +30,11 @@ export function ContactSection() {
       </div>
 
       <div className="max-w-6xl mx-auto w-full relative z-10 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 px-4 sm:px-6 md:pl-12 lg:pl-20">
-        {/* Section number */}
-        <div className="section-number text-foreground">
-          5
-        </div>
+        <SectionMarker />
 
         <div className="scroll-trigger relative z-10 text-center">
           <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.9] tracking-tight">
-            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>Contact</span>
+            <span className="block gradient-animated stagger-reveal" style={{ animationDelay: '0.1s' }}>{t.contact.title}</span>
           </h2>
           <p className="text-sm xs:text-base sm:text-lg md:text-xl text-muted-foreground/70 max-w-2xl mx-auto mt-4 sm:mt-6 md:mt-8 leading-relaxed font-light scroll-trigger">
              {t.contact.description}
@@ -47,7 +43,7 @@ export function ContactSection() {
 
         <div className="scroll-trigger flex justify-center">
           <a
-            href="https://www.linkedin.com/in/tsilavo-andriatafitasoa-5484742a8/"
+            href={profile.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex items-center justify-center px-8 sm:px-12 py-4 sm:py-5 bg-transparent border-2 border-foreground/20 text-foreground rounded-none font-light tracking-wider hover:border-primary hover:text-primary transition-all duration-500 text-sm sm:text-base uppercase relative overflow-hidden"
@@ -61,19 +57,19 @@ export function ContactSection() {
           <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
             <div className="text-[10px] xs:text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-1.5 xs:mb-2">{t.contact.email}</div>
             <a
-              href="mailto:andriatafitasoa203@gmail.com"
+              href={`mailto:${profile.email}`}
               className="text-xs xs:text-sm sm:text-base text-foreground hover:text-primary transition-colors break-all font-light"
             >
-              andriatafitasoa203@gmail.com
+              {profile.email}
             </a>
           </div>
           <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-accent/50 transition-all duration-500 card-hover">
             <div className="text-[10px] xs:text-xs sm:text-sm text-accent font-light tracking-wider uppercase mb-1.5 xs:mb-2">{t.contact.phone}</div>
             <a
-              href="tel:+261386822498"
+              href={`tel:${profile.phone.replace(/\s/g, "")}`}
               className="text-xs xs:text-sm sm:text-base text-foreground hover:text-primary transition-colors font-light"
             >
-              +261 38 68 224 98
+              {profile.phone}
             </a>
           </div>
           <div className="space-y-1.5 xs:space-y-2 p-3 xs:p-4 sm:p-6 glass border border-border/30 hover:border-primary/50 transition-all duration-500 card-hover">
