@@ -16,7 +16,7 @@ export const experiences: Experience[] = [
     company: "Quark Développement",
     period: "Juin 2025 – Juin 2026",
     location: "Remote · Liverdy-en-Brie, France",
-    link: "https://oia.quark-developpement.com/",
+    link: "https://quark-developpement.com/",
     highlights: {
       fr: [
         "Solutions IA générative (LLMs, RAG, agents) pour processus métier",

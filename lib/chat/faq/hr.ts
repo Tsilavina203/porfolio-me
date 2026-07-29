@@ -87,7 +87,7 @@ export const hrFaq: ChatFaqEntry[] = [
       fr: "Quark OIA : plateforme d'automatisation IA (agents, RAG, LangGraph) réduisant les processus manuels de 75 %. Architecture full-stack FastAPI + React + Qdrant en production.",
       en: "Quark OIA: AI automation platform (agents, RAG, LangGraph) reducing manual processes by 75%. Full-stack FastAPI + React + Qdrant architecture in production.",
     },
-    links: [{ label: { fr: "Quark OIA", en: "Quark OIA" }, href: "https://oia.quark-developpement.com/" }],
+    links: [{ label: { fr: "Quark OIA", en: "Quark OIA" }, href: "https://quark-developpement.com/" }],
   },
   {
     id: "hr-learning",

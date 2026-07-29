@@ -31,7 +31,7 @@ export const projects: Project[] = [
       en: "75% reduction in manual processes",
     },
     stack: ["LangGraph", "LLMs", "FastAPI", "React", "Qdrant", "n8n"],
-    link: "https://oia.quark-developpement.com/",
+    link: "https://quark-developpement.com/",
     featured: true,
   },
   {
